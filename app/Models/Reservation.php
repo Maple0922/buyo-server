@@ -49,12 +49,19 @@ class Reservation extends Model
         parent::boot();
 
         static::creating(function ($reservation) {
-            while (true) {
-                $randomNumber = Random::string(5, Random::NUMBERS);
-                if (!Reservation::find($randomNumber)) break;
+            if (!$reservation->id) {
+                $id = self::generateId($reservation);
+                $reservation->id = $id;
             }
-
-            $reservation->id = $randomNumber;
         });
+    }
+
+    public static function generateId(): string
+    {
+        while (true) {
+            $id = Random::string(5, Random::NUMBERS);
+            if (!Reservation::find($id)) break;
+        }
+        return $id;
     }
 }
