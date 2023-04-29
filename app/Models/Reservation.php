@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Utils\Random;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
@@ -22,8 +24,17 @@ use Illuminate\Support\Carbon;
 class Reservation extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
+
+    protected $casts = [
+        'start' => 'datetime',
+        'end' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime'
+    ];
 
     protected $dates = [
         'start',
@@ -32,4 +43,18 @@ class Reservation extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($reservation) {
+            while (true) {
+                $randomNumber = Random::string(5, Random::NUMBERS);
+                if (!Reservation::find($randomNumber)) break;
+            }
+
+            $reservation->id = $randomNumber;
+        });
+    }
 }
