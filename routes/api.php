@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('/reserve', function () {
+Route::prefix('/reserve')->group(function () {
     Route::get('/{id}', [ReservationController::class, 'show']);
     Route::get('/', [ReservationController::class, 'index']);
     Route::post('/', [ReservationController::class, 'store']);
