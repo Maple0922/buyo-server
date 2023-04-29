@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reservations', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->string('id', 5)->primary()->unique();
+            $table->string('name', 63);
             $table->datetime('start');
             $table->datetime('end');
-            $table->string('passcode');
+            $table->string('passcode', 4);
             $table->timestamps();
             $table->softDeletes();
         });
