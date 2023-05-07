@@ -50,8 +50,8 @@ class ReservationController extends Controller
                         'id' => $reservation->id,
                         'name' => $reservation->name,
                         'time' => [
-                            'start' => $reservation->start->format('H:i'),
-                            'end' => $reservation->end->format('H:i')
+                            'start' => $reservation->start->format('G:i'),
+                            'end' => $reservation->end->format('G:i')
                         ]
                     ])
                     ->values()
@@ -66,8 +66,8 @@ class ReservationController extends Controller
             'name' => $reservation->name,
             'date' => $reservation->start->format('Y-m-d'),
             'time' => [
-                'start' => $reservation->start->format('H:i'),
-                'end' => $reservation->end->format('H:i')
+                'start' => $reservation->start->format('G:i'),
+                'end' => $reservation->end->format('G:i')
             ]
         ];
     }
