@@ -25,18 +25,27 @@ class ReservationController extends Controller
                 $today->clone()->startOfWeek()->addDays($page * 7),
                 $today->clone()->endOfWeek()->addDays($page * 7)
             ])->get();
+            // 1週間分の日付の配列
+            $dates = collect(range(0, 6))
+                ->map(
+                    fn ($i) => $today
+                        ->clone()
+                        ->startOfWeek()
+                        ->addDays($i + $page * 7)
+                        ->format('Y-m-d')
+                );
         } else if ($type === 'd') {
             $reservations = $this->reservation->whereDate('start', $today->clone()->addDays($page))->get();
+            $dates = collect([$today->clone()->addDays($page)->format('Y-m-d')]);
         } else {
-            $reservations = $this->reservation->get();
+            $dates = collect([]);
         }
 
-        return $reservations
-            ->groupBy(fn ($r) => $r->start->format('Y-m-d'))
-            ->map(fn ($reservations, $date) => [
+        return $dates
+            ->map(fn ($date) => [
                 'date' => $date,
                 'reservations' => $reservations
-                    ->sortBy('start')
+                    ->filter(fn ($r) => $r->start->format('Y-m-d') === $date)
                     ->map(fn ($reservation) => [
                         'id' => $reservation->id,
                         'name' => $reservation->name,
@@ -46,9 +55,7 @@ class ReservationController extends Controller
                         ]
                     ])
                     ->values()
-            ])
-            ->sortBy('date')
-            ->values();
+            ]);
     }
 
     public function show(string $id): array
