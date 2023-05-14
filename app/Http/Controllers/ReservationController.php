@@ -74,7 +74,7 @@ class ReservationController extends Controller
         ];
     }
 
-    public function store(Request $request) // : array
+    public function store(Request $request): void
     {
         $id = $this->reservation->generateId();
         $reservation = $this->reservation->create([
@@ -87,11 +87,9 @@ class ReservationController extends Controller
 
         $this->notification->slack("create", $reservation);
         $this->notification->line("create", $reservation);
-
-        return $this->show($id);
     }
 
-    public function update(Request $request, string $id): array
+    public function update(Request $request, string $id): void
     {
         $reservation = $this->reservation->find($id);
         if (!$reservation) abort(404);
@@ -106,8 +104,6 @@ class ReservationController extends Controller
 
         $this->notification->slack("update", $reservation);
         $this->notification->line("update", $reservation);
-
-        return $this->show($reservation->id);
     }
 
     public function delete(Request $request, string $id): void
