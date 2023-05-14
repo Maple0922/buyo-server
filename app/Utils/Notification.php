@@ -46,7 +46,7 @@ class Notification
             "%date%" => $reservation->start->isoFormat('Y年M月D日 (ddd)'),
             "%startTime%" => $reservation->start->format('G:i'),
             "%endTime%" => $reservation->end->format('G:i'),
-            "%buttonLink%" => config('env.clientApplicationUrl') . "?p={$dateDiff}",
+            "%buttonLink%" => config('env.clientApplicationUrl') . "?p={$dateDiff}&openExternalBrowser=1",
         ];
 
         $linePayloadJson = strtr(json_encode(config('line')), $replace);
