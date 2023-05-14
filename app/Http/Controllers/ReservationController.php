@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
+use App\Utils\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -10,7 +11,8 @@ use Illuminate\Support\Collection;
 class ReservationController extends Controller
 {
     public function __construct(
-        private Reservation $reservation
+        private Reservation $reservation,
+        private Notification $notification
     ) {
     }
 
@@ -75,13 +77,15 @@ class ReservationController extends Controller
     public function store(Request $request) // : array
     {
         $id = $this->reservation->generateId();
-        $this->reservation->create([
+        $reservation = $this->reservation->create([
             'id' => $id,
             'name' => $request->name,
             'start' => $request->start,
             'end' => $request->end,
             'passcode' => $request->passcode
         ]);
+
+        $this->notification->slack("create", $reservation);
 
         return $this->show($id);
     }
@@ -99,6 +103,8 @@ class ReservationController extends Controller
             'end' => $request->end
         ]);
 
+        $this->notification->slack("update", $reservation);
+
         return $this->show($reservation->id);
     }
 
@@ -108,6 +114,8 @@ class ReservationController extends Controller
         if (!$reservation) abort(404);
 
         if ($reservation->passcode !== $request->passcode) abort(403);
+
+        $this->notification->slack("delete", $reservation);
 
         $reservation->delete();
     }
