@@ -24,4 +24,5 @@ Route::prefix('/reserve')->group(function () {
     Route::get('/', [ReservationController::class, 'index']);
     Route::post('/', [ReservationController::class, 'store']);
     Route::put('/{id}', [ReservationController::class, 'update']);
+    Route::delete('/{id}', [ReservationController::class, 'delete']);
 });

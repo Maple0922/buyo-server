@@ -88,7 +88,6 @@ class ReservationController extends Controller
 
     public function update(Request $request, string $id): array
     {
-        \Log::channel('single')->emergency($request->all());
         $reservation = $this->reservation->find($id);
         if (!$reservation) abort(404);
 
@@ -101,5 +100,15 @@ class ReservationController extends Controller
         ]);
 
         return $this->show($reservation->id);
+    }
+
+    public function delete(Request $request, string $id): void
+    {
+        $reservation = $this->reservation->find($id);
+        if (!$reservation) abort(404);
+
+        if ($reservation->passcode !== $request->passcode) abort(403);
+
+        $reservation->delete();
     }
 }
