@@ -32,7 +32,12 @@ class Notification
 
     public function line(string $type, Reservation $reservation)
     {
-        $dateDiff = $reservation->start->diffInDays(now());
+        $dateDiff = today()
+            ->diffInDays($reservation->start
+                ->setHour(0)
+                ->setMinute(0)
+                ->setSecond(0), false);
+
         $replace = [
             "%altText%" => "「{$reservation->name}」が{$this->message($type)}",
             "%color%" => $this->color($type),
@@ -51,7 +56,6 @@ class Notification
         $headers = ["Authorization" => "Bearer {$accessToken}"];
 
         $url = "https://api.line.me/v2/bot/message/narrowcast";
-
         Http::withHeaders($headers)->post($url, json_decode($linePayloadJson, true));
     }
 
@@ -76,9 +80,9 @@ class Notification
     private function message(string $type): string
     {
         return match ($type) {
-            'create' => '予約されました。',
-            'update' => '変更されました。',
-            'delete' => '削除されました。',
+            'create' => '予約されました',
+            'update' => '変更されました',
+            'delete' => '削除されました',
         };
     }
 }

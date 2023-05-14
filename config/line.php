@@ -34,26 +34,26 @@ return [
                             "type" => "text",
                             "text" => "%name%",
                             "weight" => "bold",
-                            "size" => "xl",
-                            "margin" => "none",
+                            "size" => "lg",
+                            "margin" => "sm",
                             "color" => "#111111"
                         ],
                         [
                             "type" => "text",
                             "text" => "%date%",
-                            "margin" => "lg",
+                            "margin" => "xxl",
                             "size" => "md",
-                            "color" => "#444444"
+                            "color" => "#888888"
                         ],
                         [
                             "type" => "text",
                             "text" => "%startTime% - %endTime%",
                             "size" => "xl",
-                            "color" => "#444444",
+                            "color" => "#333333",
                             "style" => "normal",
                             "decoration" => "none",
                             "align" => "start",
-                            "margin" => "sm"
+                            "margin" => "none"
                         ]
                     ],
                     "backgroundColor" => "#ffffff"
