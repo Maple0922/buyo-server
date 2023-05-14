@@ -86,6 +86,7 @@ class ReservationController extends Controller
         ]);
 
         $this->notification->slack("create", $reservation);
+        $this->notification->line("create", $reservation);
 
         return $this->show($id);
     }
@@ -104,6 +105,7 @@ class ReservationController extends Controller
         ]);
 
         $this->notification->slack("update", $reservation);
+        $this->notification->line("update", $reservation);
 
         return $this->show($reservation->id);
     }
@@ -116,6 +118,7 @@ class ReservationController extends Controller
         if ($reservation->passcode !== $request->passcode) abort(403);
 
         $this->notification->slack("delete", $reservation);
+        $this->notification->line("delete", $reservation);
 
         $reservation->delete();
     }

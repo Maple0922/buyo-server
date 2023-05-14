@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 /**
  * properties:
  *
- * @property integer $id
+ * @property string $id
  * @property string $name
  * @property Carbon $start
  * @property Carbon $end
@@ -29,6 +29,7 @@ class Reservation extends Model
     protected $guarded = [];
 
     protected $casts = [
+        'id' => 'string',
         'start' => 'datetime',
         'end' => 'datetime',
         'created_at' => 'datetime',

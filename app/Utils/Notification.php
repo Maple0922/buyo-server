@@ -13,7 +13,7 @@ class Notification
             'text' => $this->message($type),
             'attachments' => [
                 [
-                    'color' => $this->color($type),
+                    'color' => $this->colorType($type),
                     'fields' => [
                         [
                             'title' => $reservation->name,
@@ -27,18 +27,20 @@ class Notification
             ]
         ];
 
-        Http::post(config('env.slackWebhookUrl'), json_encode($message));
+        Http::post(config('env.slackWebhookUrl'), $message);
     }
 
     public function line(string $type, Reservation $reservation)
     {
         $dateDiff = $reservation->start->diffInDays(now());
         $replace = [
+            "%altText%" => "「{$reservation->name}」が{$this->message($type)}",
+            "%color%" => $this->color($type),
             "%headerMessage%" => $this->message($type),
             "%name%" => $reservation->name,
-            "%date%" => $reservation->start->format('Y年m月d日 (D)'),
+            "%date%" => $reservation->start->isoFormat('Y年M月D日 (ddd)'),
             "%startTime%" => $reservation->start->format('G:i'),
-            "%endTime%" => $reservation->start->format('G:i'),
+            "%endTime%" => $reservation->end->format('G:i'),
             "%buttonLink%" => config('env.clientApplicationUrl') . "?p={$dateDiff}",
         ];
 
@@ -46,22 +48,28 @@ class Notification
 
         $accessToken = config('env.lineAccessToken');
 
-        $headers = [
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $accessToken
-        ];
+        $headers = ["Authorization" => "Bearer {$accessToken}"];
 
         $url = "https://api.line.me/v2/bot/message/narrowcast";
 
-        Http::withHeaders($headers)->post($url, $linePayloadJson);
+        Http::withHeaders($headers)->post($url, json_decode($linePayloadJson, true));
     }
 
     private function color(string $type): string
     {
         return match ($type) {
-            'create' => '#36a64f',
-            'update' => '#f2c744',
-            'delete' => '#d00000',
+            'create' => '#1A237E',
+            'update' => '#F57D17',
+            'delete' => '#B71C1C',
+        };
+    }
+
+    private function colorType(string $type): string
+    {
+        return match ($type) {
+            'create' => 'good',
+            'update' => 'warning',
+            'delete' => 'danger',
         };
     }
 
