@@ -86,7 +86,7 @@ class ReservationController extends Controller
         ]);
 
         $this->notification->slack("create", $reservation);
-        $this->notification->line("create", $reservation);
+        // $this->notification->line("create", $reservation);
     }
 
     public function update(Request $request, string $id): void
@@ -103,7 +103,7 @@ class ReservationController extends Controller
         ]);
 
         $this->notification->slack("update", $reservation);
-        $this->notification->line("update", $reservation);
+        // $this->notification->line("update", $reservation);
     }
 
     public function delete(Request $request, string $id): void
@@ -114,7 +114,7 @@ class ReservationController extends Controller
         if ($reservation->passcode !== $request->passcode) abort(403);
 
         $this->notification->slack("delete", $reservation);
-        $this->notification->line("delete", $reservation);
+        // $this->notification->line("delete", $reservation);
 
         $reservation->delete();
     }
