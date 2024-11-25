@@ -1,0 +1,10 @@
+fuse:
+  dir: "/var/lib/litefs"
+
+data:
+  dir: "/var/lib/litefs/data"
+
+proxy:
+  addr: ":8080"
+  target: "localhost:80"
+  db: "/var/lib/litefs/data/database.sqlite"
