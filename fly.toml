@@ -7,13 +7,14 @@ app = "buyo"
 
 [env]
   APP_ENV = "production"
-  LOG_CHANNEL = "stderr"
+  LOG_CHANNEL = "slack"
   LOG_LEVEL = "info"
   LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
   SESSION_DRIVER = "cookie"
   SESSION_SECURE_COOKIE = "true"
   DB_CONNECTION = 'sqlite'
   DB_DATABASE = '/var/lib/litefs/data/database.sqlite'
+  LOG_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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'
 
 [http_service]
   internal_port = 8080
