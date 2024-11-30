@@ -13,8 +13,7 @@ class ReservationController extends Controller
     public function __construct(
         private Reservation $reservation,
         private Notification $notification
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): Collection
     {
@@ -24,16 +23,16 @@ class ReservationController extends Controller
 
         if ($type === 'w') {
             $reservations = $this->reservation->whereBetween('start', [
-                $today->clone()->startOfWeek()->addDays($page * 7),
-                $today->clone()->endOfWeek()->addDays($page * 7)
+                $today->clone()->startOfWeek()->addDays((int)$page + 5),
+                $today->clone()->endOfWeek()->addDays((int)$page + 5)
             ])->get();
             // 1週間分の日付の配列
             $dates = collect(range(0, 6))
                 ->map(
-                    fn ($i) => $today
+                    fn($i) => $today
                         ->clone()
                         ->startOfWeek()
-                        ->addDays($i + $page * 7)
+                        ->addDays((int)$i + $page + 5)
                         ->format('Y-m-d')
                 );
         } else if ($type === 'd') {
@@ -44,11 +43,11 @@ class ReservationController extends Controller
         }
 
         return $dates
-            ->map(fn ($date) => [
+            ->map(fn($date) => [
                 'date' => $date,
                 'reservations' => $reservations
-                    ->filter(fn ($r) => $r->start->format('Y-m-d') === $date)
-                    ->map(fn ($reservation) => [
+                    ->filter(fn($r) => $r->start->format('Y-m-d') === $date)
+                    ->map(fn($reservation) => [
                         'id' => $reservation->id,
                         'name' => $reservation->name,
                         'time' => [
